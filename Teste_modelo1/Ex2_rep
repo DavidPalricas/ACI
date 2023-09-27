@@ -1,0 +1,72 @@
+#Mapa de Registos:
+#$t0: &(val[0])
+#$t1: i
+    
+      .data
+    .eqv SIZE,8
+    .eqv print_string,4
+    .eqv print_int10,1
+    .eqv print_char,11
+    
+str: .asciiz "Result is: "
+
+val: .word 8,4,15,-1987,327,-9,27,16
+ 
+
+     .text
+     .globl main
+     
+main: la $t0,val #&(val[0])
+      li $t1,0 #i
+      
+do1:  mulu $t2,$t1,4# i * 4
+     addu $t2,$t2,$t0#val[i]
+     sw $t3,0($t2) #v = val[i]
+     
+     addiu $t4,$t0,4#i + SIZE/2(8/2=4)
+     addu $t5,$t5,$t0# val[i+ SIZE/2]
+     sw $t2,0($t5)# val[i] = val[i+ SIZE/2]
+     sw $t3,0($t5)# val[i+ SIZE/2] = v
+     
+   
+while1: addiu $t1,$t1,4 #++i
+       bge $t1,4,end_do1
+       j do1
+       
+end_do1: la $a0,str
+        li $v0,print_string
+        syscall#print_string("Result is: ")
+        
+        li $t1,0# i = 0
+
+do2:  addiu $t1,$t1,4 #i++
+      mulu $t2,$t1,4# i * 4
+      addu $t2,$t2,$t0#val[i++]
+      
+      lw $a0,0($t2) 
+      li $v0,print_int10
+      syscall#print_int10(val++)
+      
+      li $a0,','
+      li $v0,print_char
+      syscall #print_char(',')
+      
+while2: bge $t1,SIZE,end_do2 #i >= SIZE
+        j do2
+        
+end_do2: jr $ra
+      
+           
+ 
+       
+     
+     
+     
+     
+     
+     
+
+       
+     
+
+     

@@ -1,0 +1,69 @@
+  .data
+a: .space 20
+
+ba: .space 20
+
+  .eqv N,35
+  .eqv read_int,5
+  .eqv print_int10,1
+  .text
+  .globl main
+  
+main: li $t0,0 #n_even= 0
+      li $t1,0#n_odd = 0
+      
+      la,$t2,a# p1 = a
+      li $t4,N
+      mulu $t4,$t4,4
+      addu $t4,$t2,$t4
+      
+for1: bge $t2,$t4,end_for1 #pl >= a + N
+      li $v0,read_int
+      syscall
+      sw $v0,0($t2) #*p1 = read_int
+      
+      addiu $t2,$t2,4 #p1++
+      j for1
+      
+end_for1: la,$t2,a# p1 = a
+          la,$t3,ba #p2 = ba
+         
+      
+for2:  bge $t2,$t4,end_for2 #pl >= a + N
+       lw $t5,0($t2) #*pl
+       
+       rem $t6,$t5,2 #*pl  % 2
+       
+     
+       
+ 
+if: beqz $t6,else
+    sw $t5,0($t3) #*p2= *p1
+    addiu $t3,$t3,4 ##*p2++= *p1
+    
+    addiu $t1,$t1,1 #n_odd++
+    
+    j end_if
+      
+else: addiu $t0,$t0,1
+      
+end_if: addiu $t2,$t2,4
+        j for2
+
+end_for2:  la,$t3,ba #p2 = ba
+           mul $t1,$t1,4
+           addu $t4,$t3,$t1 # b + n_odd
+           
+for3: bge $t3,$t4,end_for3 
+
+      lw $a0,0($t3)
+      li $v0,print_int10
+      syscall
+  
+      
+      addiu $t3,$t3,4
+      j for3
+      
+end_for3: jr $ra
+      
+      

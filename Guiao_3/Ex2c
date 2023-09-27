@@ -1,0 +1,44 @@
+      .data
+str1: .asciiz "Introduza um numero: "
+str2: .asciiz "\nO valor em binário e': "
+      .eqv print_string,4
+      .eqv read_int,5
+      .eqv print_char,11                                                    #Mapa de Registos                                                                    
+      .text                                                                 #value-$t0
+      .globl main                                                           #bit-$t1
+main:  li $t2,0                                                             #i-$t2      
+              
+       la $a0,str1
+       li $v0,print_string
+       syscall #print string
+       
+       li,$v0,read_int
+       syscall #value = read_int
+       move $t0,$v0
+       
+       la $a0,str2
+       li $v0,print_string
+       syscall #print string
+       
+for:   bge $t2,32,endfor
+       
+       
+       andi $t3,$t0,0x80000000
+       
+       sra $t1,$t3,31
+       
+       ori $t4,$t1,0x30
+       
+       li $v0,print_char
+       ori $a0,$t4,0
+       syscall
+       addi $t2,$t2,1
+       j for
+
+ 
+ 
+endfor: jr $ra
+ 
+       
+       
+       

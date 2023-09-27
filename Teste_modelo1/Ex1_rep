@@ -1,0 +1,60 @@
+   .data
+str1: .asciiz "Digite ate 20 inteiros (zero para terminar):"
+str2: .asciiz "Máximo/mínimo são: "
+      .eqv print_string,4
+      .eqv read_int,5
+      .eqv print_int10,1
+      .eqv print_char,11
+      .text
+      .globl main
+      
+main: li $t1,0 #n
+      li $t2,0x7777777 #min
+      li $t3,0x8000000 #max
+     
+      la $a0,str1
+      li $v0,print_string
+      syscall #print_string("Digite ate 20 inteiros (zero para terminar):")
+      
+do: li $v0,read_int
+    syscall
+    move $t0,$v0 # val = read_int()
+    
+if1: beqz $t0,endif1
+
+if2: ble $t0,$t3,if3 #val <= max
+     move $t3,$t0
+  
+     
+if3: bge $t0,$t2,endif1 #val >= min
+     move $t2,$t0
+     
+endif1: addiu $t1,$t1,1
+        
+while: bge $t1,3,end_do
+       beqz $t0,end_do
+       j do
+        
+end_do:   la $a0,str2
+          li $v0,print_string
+          syscall #print_string("Máximo/mínimo são: ")
+          
+          li $v0,print_int10
+          move $a0,$t3
+          syscall #print_int10(max)
+          
+          li $a0,':'
+          li $v0,print_char
+          syscall #print_char(':')
+         
+          
+          li $v0,print_int10
+          move $a0,$t2
+          syscall #print_int10(min)
+          
+          jr $ra
+     
+     
+    
+      
+   

@@ -1,0 +1,74 @@
+ 
+  #Mapa de Registos
+  #$t0-val
+  #$t1-min
+  #$t2-max
+  #t3-n
+   
+  .data
+  str1: .asciiz "Digite até 20 inteiros (zero para terminar):"
+  str2: .asciiz "Máximo/mínimo são: "
+  .eqv read_int,5
+  .eqv print_string,4
+  .eqv print_int10,1
+  .eqv print_char,11
+  .text
+  .globl main
+  
+main: li,$t1,0x7FFFFFFF#t1: min = 0x7FFFFFFF
+      li,$t2,0x80000000#t2: max =  0x80000000
+      li,$t3,0 #n  = 0
+      
+      la $a0,str1
+      li $v0,print_string
+      syscall #print_String( "Digite até 20 inteiros (zero para terminar):")
+       
+      
+do:   li,$v0,read_int
+      syscall # val = read_int()
+      move $t0,$v0
+      
+if1:   beqz $t0,endif1 # if val==0
+      
+if2:  ble $t0,$t2,if3 #if val <= ma
+      addu $t2,$0,$t0
+
+      j endif1
+      
+if3: bge $t0,$t1,endif1 #if val >= min
+     addu $t1,$0,$t0
+
+      
+      
+endif1: addi,$t3,$t3,1 #n++
+
+while: bnez $t0,condition #val!=0
+       j enddo
+condition: blt $t3,20 do # n < 20
+  
+            
+enddo: la $a0,str2
+       li $v0,print_string
+       syscall #print_String( "Máximo/mínimo são: ")
+       
+       addi $a0,$t2,0
+       li,$v0,print_int10
+       syscall#print_int10(max)
+       
+       li $a0,':'
+       li $v0,print_char
+       syscall #print_char(':')
+       
+       addi $a0,$t1,0
+       li $v0,print_int10
+       syscall#print_int10(max)
+       
+       jr $ra
+       
+       
+       
+        
+      
+      
+      
+      

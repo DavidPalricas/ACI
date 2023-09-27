@@ -1,0 +1,8 @@
+Exercício 2:
+Resultado para x = 3:
+Hexadecimal = FFF(...)E
+Decimal = -2
+
+Resultado para x= 5
+Hexadecimal=2
+Decimal=2

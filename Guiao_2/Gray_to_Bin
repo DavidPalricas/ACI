@@ -1,0 +1,17 @@
+.data
+.text
+.globl main
+main:
+    li $t0,2#gray = 2
+    add $t1,$t0,$t1 #num = gray
+    sra $t3,$t1,4 #num>>4
+    xor $t1,$t1,$t3 #num ^(num>>4)
+    sra $t4,$t1,2 #num>>2
+    xor $t1,$t1,$t4 #num ^(num>>2)
+    sra $t5,$t1,1 #num>>1
+    xor $t2,$t1,$t5 #bin = num, bin = num ^(num>>1)
+    
+    jr $ra
+    
+    
+    

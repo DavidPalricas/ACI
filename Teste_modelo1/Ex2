@@ -1,0 +1,49 @@
+   .data
+   .eqv SIZE,8
+val : .word 8,4,15,-1987,327,-9,27,16
+str: .asciiz "Result is: "
+     .eqv print_string,4
+     .eqv print_char,11
+     .eqv print_int10,1
+     .text
+     .globl main
+     
+main: li $t0,0 #i = 0
+      la,$t1,val
+      
+do1: addu $t1,$t1,$t0 #val[i]
+     lb $t2,0($t1) # v = val[i]
+     li $t3,SIZE #SIZE- $t3
+     divu $t3,$t3,2#SIZE/2- $t3
+     addu $t4,$t0,$t3#i + SIZE/2-$t4
+     move $t4,$t1
+     lb $t2,0($t1) # v = val[i+SIZE/2]
+     addiu $t0,$t0,4# ++i
+     blt $t0,$t3,do1
+     
+     
+     
+enddo1: la $a0,str
+      li $v0,print_string
+      syscall # print: Result is:
+      
+      li $t0,0 #i = 0
+     
+do2:  addiu $t5,$t0,4 #[i++]
+      addu $t1,$t1,$t5 #val[i++]
+      
+      move $t1,$a0
+      li $v0,print_int10
+      syscall
+      
+      ori $a0,$0,','
+      li $v0,print_char
+      syscall
+  
+      blt $t0,SIZE do2 # i<SIZE
+      
+enddo2: jr $ra
+      
+     
+    
+     

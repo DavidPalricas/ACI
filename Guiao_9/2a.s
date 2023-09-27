@@ -1,0 +1,49 @@
+.data
+
+five: .double 5.0
+nine: .double 9.0
+thirty_two: .double 32.0
+.eqv read_int,5
+.eqv print_double,3
+.text
+.globl main
+
+
+
+main: aaddiu $sp,$sp,-4
+       sw $ra,0($sp)
+
+       li $v0,read_int
+
+       mtc1 $v0,$f12
+       cvt.w.d $f12,$f12
+       jal f2c
+
+       mov.d $f12,$f0
+       li $v0,print_double
+       syscall
+
+       li $v0,0			# return 0;
+ 	   lw $ra,0($sp)		# repõe o valor de $ra
+	   addiu $sp,$sp,4		# liberta espaço da stack
+	   jr $ra 			# Fim do programa
+
+
+
+
+
+
+
+
+.text
+f2c: 
+     l.d $f0,five
+     l.d $f2,nine
+     div.d $f0,$f0,$f2
+
+     l.d $f2,thirty_two
+     sub.d $f2,$f12,$f2
+
+     mul.d $f0,$f0,$f2
+
+     jr $ra
